@@ -1,36 +1,28 @@
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
 import os
-from threading import Thread
-from flask import Flask
-import telebot
+from dotenv import load_dotenv
 
-TOKEN = "8658764867:AAElz0WXlaKML9IwgLmesv1_0Sgsn5UH7E"
-bot = telebot.TeleBot(TOKEN)
+load_dotenv()
 
-# مسح أي ويب هوك قديم عالق لدى تليجرام فوراً
-try:
-    bot.remove_webhook()
-except Exception as e:
-    print(e)
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
-# سيرفر ويب وهمي لكي يرضى موقع Render
-app = Flask("app")
 
-@app.route("/")
-def home():
-    return "I am alive and the bot is running!"
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🦅 أهلاً بك في RAED X\n\nالبوت يعمل بنجاح ✅"
+    )
 
-def run():
-    app.run(host="0.0.0.0", port=8080)
 
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
+def main():
+    app = Application.builder().token(TOKEN).build()
 
-# دالة تشغيل البوت
-def run_bot():
-    print("Bot started polling...")
-    bot.infinity_polling(none_stop=True)
+    app.add_handler(CommandHandler("start", start))
+
+    print("RAED X Bot Started...")
+
+    app.run_polling()
+
 
 if __name__ == "__main__":
-    keep_alive()
-    run_bot()
+    main()
