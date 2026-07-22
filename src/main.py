@@ -6,7 +6,13 @@ import telebot
 TOKEN = "8658764867:AAElz0WXlaKML9IwgLmesv1_0Sgsn5UH7E"
 bot = telebot.TeleBot(TOKEN)
 
-# سيرفر ويب وهمي لكي يرضى موقع Render ويظل البوت شغّالاً
+# مسح أي ويب هوك قديم عالق لدى تليجرام فوراً
+try:
+    bot.remove_webhook()
+except Exception as e:
+    print(e)
+
+# سيرفر ويب وهمي لكي يرضى موقع Render
 app = Flask("app")
 
 @app.route("/")
