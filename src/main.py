@@ -1,33 +1,28 @@
 import os
-from threading import Thread
-from flask import Flask
+from flask import Flask, request
 import telebot
 
-# إعداد توكن البوت الخاص بك
 TOKEN = "8658764867:AAHfWGPjjmvPqGazA894ujhtG3uVipl11I8"
-
-
 bot = telebot.TeleBot(TOKEN)
 
-# إنشاء خادم ويب وهمي لكي يرضى موقع Render
 app = Flask("app")
+
+# مسار استقبال الرسائل من تليجرام (Webhook)
+@app.route(f"/{TOKEN}", methods=["POST"])
+def webhook():
+    json_string = request.get_data().decode("utf-8")
+    update = telebot.types.Update.de_json(json_string)
+    bot.process_new_updates([update])
+    return "!", 200
 
 @app.route("/")
 def home():
-    return "I am alive and the bot is running!"
-
-def run():
-    app.run(host="0.0.0.0", port=8080)
-
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
-
-# دالة لتشغيل البوت في الخلفية بشكل صحيح
-def run_bot():
-    bot.infinity_polling(none_stop=True)
+    return "Bot is running via Webhook!"
 
 if __name__ == "__main__":
-    keep_alive()
-    run_bot()
-
+    # ربط البوت برابط موقعك على Render تلقائياً
+    bot.remove_webhook()
+    bot.set_webhook(url=f"https://raedx.onrender.com/{TOKEN}")
+    
+    # تشغيل سيرفر الويب
+    app.run(host="0.0.0.0", port=8080)
