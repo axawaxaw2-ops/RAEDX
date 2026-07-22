@@ -4,7 +4,9 @@ from flask import Flask
 import telebot
 
 # إعداد توكن البوت الخاص بك
-TOKEN = "8658764867:AAH9sHro63fGdyNBKGs8b4Ra2qJscnPmtYQ"
+TOKEN = "8658764867:AAHfWGPjjmvPqGazA894ujhtG3uVipl11I8"
+
+
 bot = telebot.TeleBot(TOKEN)
 
 # إنشاء خادم ويب وهمي لكي يرضى موقع Render
