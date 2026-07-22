@@ -1,15 +1,30 @@
+import os
+from threading import Thread
+from flask import Flask
 import telebot
 
 TOKEN = "8658764867:AAHfWGPjjmvPqGazA894ujhtG3uVipl11I8"
 bot = telebot.TeleBot(TOKEN)
 
-@bot.message_handler(commands=['start'])
-def send_welcome(message):
-    bot.reply_to(message, "أهلاً بك! البوت يعمل بنجاح تام 🚀")
+# سيرفر ويب وهمي لكي يرضى موقع Render ويظل البوت شغّالاً
+app = Flask("app")
 
-@bot.message_handler(func=lambda message: True)
-def echo_all(message):
-    bot.reply_to(message, f"لقد أرسلت: {message.text}")
+@app.route("/")
+def home():
+    return "I am alive and the bot is running!"
 
-print("Bot is running...")
-bot.infinity_polling()
+def run():
+    app.run(host="0.0.0.0", port=8080)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
+# دالة تشغيل البوت
+def run_bot():
+    print("Bot started polling...")
+    bot.infinity_polling(none_stop=True)
+
+if __name__ == "__main__":
+    keep_alive()
+    run_bot()
