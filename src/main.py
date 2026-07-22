@@ -3,7 +3,7 @@ from threading import Thread
 from flask import Flask
 import telebot
 
-TOKEN = "8658764867:AAHfWGPjjmvPqGazA894ujhtG3uVipl11I8"
+TOKEN = "8658764867:AAElz0WXlaKML9IwgLmesv1_0Sgsn5UH7E"
 bot = telebot.TeleBot(TOKEN)
 
 # سيرفر ويب وهمي لكي يرضى موقع Render ويظل البوت شغّالاً
